@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-//import { Link } from 'react-router-dom' 
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default class TeamsList extends Component {
+export default function TeamsList(props) {
   // //using simply react
   // state = {teams:null}
   // componentDidMount(){
@@ -11,25 +11,14 @@ export default class TeamsList extends Component {
   //   })
   //   .then(teams => this.setState({teams:teams}))
   // }
-  render () {
-    // const teams = this.props
-    //console.log('checking props',this.props.teams)
+  // const teams = this.props
+  //console.log('checking props',this.props.teams)
+  if(!props.teams) return 'Loading'
+
     return <div>
-      <h1>Welcome to class!</h1>
-    
-             <h1>hello Team</h1>
-              {/* { this.state.teams && this.state.teams.map((team)=> <h1>{team.name}</h1>) }  */}
-              {/* {this.props.team && this.props.teams.map(team => {
-                return <div>
-                  {team.name}
-                </div>
-              })} */}
-              {this.props.teams === null ? "Loading" : this.props.teams.map(team =>(
-                <div>
-                  {team.name}
-                </div>
-              ))}
-    
+        {props.teams.map(team => {
+            return <li key={team.id}><Link to={`/teams/${team.id}`}>{team.name}</Link></li>
+        })}
     </div>
-  }
+
 }

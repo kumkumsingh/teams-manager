@@ -1,34 +1,77 @@
 import request from 'superagent'
 
-export function getTeams() {
-    return function (dispatch) {
-      request('http://localhost:4000/team')
+export const TEAMS_FETCHED = 'TEAMS_FETCHED'
+
+const baseUrl = 'http://localhost:4000'
+
+const teamsFetched = teams => ({
+    type: TEAMS_FETCHED,
+    payload: teams
+})
+
+export const loadTeams = () => (dispatch, getState) => {
+    // when the state already contains events, we don't fetch them again
+    if (getState().teams.length !== 0) return
+
+    // a GET /events request
+    request(`${baseUrl}/team`)
         .then(response => {
-          dispatch({
-            type : 'FETCH_TEAMS',  
-            payload : response.body
+            // dispatch an EVENTS_FETCHED action that contains the events
+            dispatch(teamsFetched(response.body))
         })
-    
-    })
-    }}
+        .catch(console.error)
+}
 
-// export const TEAMS_FETCHED = 'TEAMS_FETCHED'
+export const TEAM_CREATE_SUCCESS = 'TEAM_CREATE_SUCCESS'
 
-// const baseUrl = 'http://localhost:4000'
-// const teamsFetched = teams => ({
-//     type: 'TEAMS_FETCHED',
-//     teams
-//   })
-// export const loadTeams = () => (dispatch, getState) => {
-//     // when the state already contains teams, we don't fetch them again
-//     if (getState().teams) return
-  
-//     // a GET /TEAMS request
-//     request(`${baseUrl}/team`)
-//       .then(response => {
-//           console.log('checking reponse', response.body)
-//         // dispatch an TEAMS_FETCHED action that contains the TEAMS
-//         dispatch(teamsFetched(response.body))
-//       })
-//       .catch(console.error)
-//   }
+const teamCreateSuccess = team => ({
+    type: TEAM_CREATE_SUCCESS,
+    payload: team
+})
+
+export const createTeam = (data) => dispatch => {
+    request
+        .post(`${baseUrl}/team`)
+        .send(data)
+        .then(response => {
+            dispatch(teamCreateSuccess(response.body))
+        })
+        .catch(console.error)
+}
+
+//DELETE REQUEST
+export const TEAM_DELETE_SUCCESS = 'TEAM_DELETE_SUCCESS'
+
+const teamDeleteSuccess = team => ({
+    type: TEAM_DELETE_SUCCESS,
+    payload: team
+
+})
+
+export const deleteTeam = (data) => dispatch => {
+    request
+        .delete(`${baseUrl}/team/:${data}`)
+        .then(response => {
+            dispatch(teamDeleteSuccess(response.body))
+        })
+        .catch(console.error)
+}
+
+export const TEAM_FETCHED = 'TEAM_FETCHED'
+
+const teamDetail = team => ({
+    type: TEAM_FETCHED,
+    payload: team
+
+})
+
+export const fetchTeam = (id) => dispatch => {
+
+    request
+        .get(`${baseUrl}/team/${id}`)
+        .then(response => {
+            dispatch(teamDetail(response.body))
+            console.log(response.body)
+        })
+        .catch(console.error)
+}
