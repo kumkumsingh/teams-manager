@@ -1,25 +1,41 @@
 import React, { Component } from 'react'
-import store from './store'
-import { Provider } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 import TeamsListContainer from './components/TeamListContainer'
 import CreateTeamFormContainer from './components/CreateTeamFormContainer'
 import TeamDetailsContainer from './components/TeamDetailsContainer'
+import LogInFormContainer from './components/LogInFormContainer'
+import { connect } from "react-redux";
 
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <div className="App">
-          <header className="App-header">
-            <Route path="/" exact component={TeamsListContainer} />
-            <Route path="/" exact component = {CreateTeamFormContainer}></Route>
-            <Route path ="/teams/:id" exact component = {TeamDetailsContainer}></Route>
-          </header>
-        </div>
-      </Provider>
+
+      <div className="App">
+
+        <header className="App-header">
+          <h2>Team Management page</h2>
+    
+          {this.props.loggedIn ? (
+            "You're logged in"
+          ) : (
+              <Link to="/login"> Login</Link>
+            )}
+          <Route path="/teams" exact component={TeamsListContainer} />
+          <Route path="/teams" exact component={CreateTeamFormContainer}></Route>
+          <Route path="/teams/:id" exact component={TeamDetailsContainer}></Route>
+          <Route path="/login" excat component={LogInFormContainer}></Route>
+        
+        </header>
+      </div>
+
     );
   }
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.auth !== null
+  };
+};
+
+export default connect(mapStateToProps)(App);

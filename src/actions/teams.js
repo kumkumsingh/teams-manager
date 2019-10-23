@@ -29,9 +29,11 @@ const teamCreateSuccess = team => ({
     payload: team
 })
 
-export const createTeam = (data) => dispatch => {
+export const createTeam = (data) => (dispatch ,getState)=> {
+    const token = getState().auth;
     request
         .post(`${baseUrl}/team`)
+        .set("Authorization", `Bearer ${token}`)
         .send(data)
         .then(response => {
             dispatch(teamCreateSuccess(response.body))
@@ -42,20 +44,24 @@ export const createTeam = (data) => dispatch => {
 //DELETE REQUEST
 export const TEAM_DELETE_SUCCESS = 'TEAM_DELETE_SUCCESS'
 
-const teamDeleteSuccess = team => ({
+const teamDeleteSuccess = id => ({
     type: TEAM_DELETE_SUCCESS,
-    payload: team
+    payload:id
 
 })
 
-export const deleteTeam = (data) => dispatch => {
+export const deleteTeam = (id) => dispatch => {
     request
-        .delete(`${baseUrl}/team/:${data}`)
+        .delete(`${baseUrl}/team/${id}`)
         .then(response => {
-            dispatch(teamDeleteSuccess(response.body))
+            console.log(response.body)
+            console.log('checking id ',id)
+            dispatch(teamDeleteSuccess(id))
+           
         })
         .catch(console.error)
 }
+
 
 export const TEAM_FETCHED = 'TEAM_FETCHED'
 
