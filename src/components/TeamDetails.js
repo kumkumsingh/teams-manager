@@ -6,6 +6,8 @@ export default function TeamDetails(props) {
     console.log('checking prop', props.team)
     return (
         <div>
+
+            <p>{`Team Name: ${props.team.name}`}</p>
             <p>List of Players</p>
             {props.team.name && <ul>{props.team.players.map((data, index) => {
                 return <li key={index}>{data.name}</li>

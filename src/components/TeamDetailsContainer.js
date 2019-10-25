@@ -3,8 +3,9 @@ import TeamDetails from './TeamDetails'
 import { fetchTeam } from '../actions/teams'
 import { deleteTeam } from '../actions/teams'
 import { connect } from 'react-redux'
-import { Redirect,Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import CreatePlayerFormContainer from './CreatePlayerFormContainer'
+import UpdateTeamFormContainer from './UpdateTeamFormContainer'
 class TeamDetailsContainer extends Component {
     state = {
         deleted: false
@@ -36,6 +37,8 @@ class TeamDetailsContainer extends Component {
                     )}
                 <TeamDetails team={this.props.team}
                     onDelete={this.onDelete} />
+
+                <UpdateTeamFormContainer teamId={this.props.team.id }/>
             </div>
         )
     }

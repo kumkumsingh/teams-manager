@@ -29,7 +29,7 @@ const teamCreateSuccess = team => ({
     payload: team
 })
 
-export const createTeam = (data) => (dispatch ,getState)=> {
+export const createTeam = (data) => (dispatch, getState) => {
     const token = getState().auth;
     request
         .post(`${baseUrl}/team`)
@@ -46,7 +46,7 @@ export const TEAM_DELETE_SUCCESS = 'TEAM_DELETE_SUCCESS'
 
 const teamDeleteSuccess = id => ({
     type: TEAM_DELETE_SUCCESS,
-    payload:id
+    payload: id
 
 })
 
@@ -55,9 +55,9 @@ export const deleteTeam = (id) => dispatch => {
         .delete(`${baseUrl}/team/${id}`)
         .then(response => {
             console.log(response.body)
-            console.log('checking id ',id)
+            console.log('checking id ', id)
             dispatch(teamDeleteSuccess(id))
-           
+
         })
         .catch(console.error)
 }
@@ -78,6 +78,29 @@ export const fetchTeam = (id) => dispatch => {
         .then(response => {
             dispatch(teamDetail(response.body))
             console.log(response.body)
+        })
+        .catch(console.error)
+}
+// ...............update a team nae --------------
+export const TEAM_UPDATE_SUCCESS = 'TEAM_UPDATE_SUCCESS'
+
+const teamUpdateSuccess = team => ({
+    type: TEAM_UPDATE_SUCCESS,
+    payload: team
+})
+
+export const UpdateTeam = (id, name) => (dispatch, getState) => {
+
+    const token = getState().auth;
+    console.log('checking token in updateteamreducer',token)
+    console.log('checking id,name for updateteamreducer',id ,name)
+    request
+        .put(`${baseUrl}/team/${id}`)
+        .send(name)
+        .then(response => {
+            dispatch(teamUpdateSuccess(response.body))
+            console.log('checking response in updateteam',response.body)
+           
         })
         .catch(console.error)
 }
